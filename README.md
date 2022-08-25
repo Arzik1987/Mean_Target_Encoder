@@ -35,7 +35,8 @@ In this case, MTE is a trick to speed up the decision tree learning algorithm th
 
 #### Hypothsis 0
 
-*Maybe considering richer topologies like the [Chrisman's](https://en.wikipedia.org/wiki/Level_of_measurement#Debate_on_Stevens's_typology) one may improve tree-based models. For instance, 'cyclic' features like 'month' may deserve special consideration.*
+> Maybe considering richer topologies like the [Chrisman's](https://en.wikipedia.org/wiki/Level_of_measurement#Debate_on_Stevens's_typology) one may improve tree-based models. 
+> For instance, 'cyclic' features like 'month' may deserve special consideration.
 
 
 ### Overfitting? Nominal features.
@@ -51,12 +52,13 @@ Similarly, MTE itself is a cause of overfitting problem only when one uses it fo
 
 
 #### Hypothesis 1
-*For ordinal features, one should use label encoding that preserves the natural order of categories.*
+> For ordinal features, one should use label encoding that preserves the natural order of categories.
 
 The 'out-of-sample encoding' suggested in [this blogpost](https://towardsdatascience.com/benchmarking-categorical-encoders-9c322bd77ee8) or in this paper [[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf) helps to reduce this overfitting by decreasing the correlation between the encoded and the target features. 
 As a result, it lowers the 'observed' predictive power of nominal features with a significant share of poorly represented categories and tends to use (more) other features in tree construction.
 
-#### <a name="table1"></a> Example 1
+<div align="center">
+<a name="table1"></a> 
 
 | cat  | target   |
 |:-:|:-:|
@@ -66,13 +68,17 @@ As a result, it lowers the 'observed' predictive power of nominal features with 
 | D  | 0  |
 
 Table 1: Exemplary dataset 1
+</div>
 
-Out-of-sample encoding for the dataset from Table [1](#table1) would replace all categories with the prior target value of 0.5 (check if this is default behavior!), making the feature irrelevant for tree construction.
+#### Example 1
+
+> Out-of-sample encoding for the dataset from Table [1](#table1) would replace all categories with the prior target value of 0.5 (check if this is default behavior!), making the feature irrelevant for tree construction.
 
 Another trick, discussed in [[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf) is soothing. Smoothing also changes the correlation between the encoded feature and the target. 
 It does so by reordering encoded values so poorly represented classes become closer to each other when ordered by encoded values. 
 
-#### <a name="table2"></a> Example 2
+<div align="center">
+<a name="table2"></a> 
 
 | cat  | target   |
 |:-:|:-:|
@@ -93,32 +99,34 @@ It does so by reordering encoded values so poorly represented classes become clo
 | ...| ...|
 
 Table 2: Exemplary dataset 2. The excerpt containing all examples with values of category in {A,B,C}.
+</div>
 
-Table [2](#table2) contains the excerpt from some perfectly balanced (i.e., containing equal number of 0 and 1 in the column 'target') dataset. 
-Assume that this excerpt contains all examples with category values in {A,B,C}. 
-The corresponding MTE values are {0,0.2,0.25} that orders these values as {A,B,C}. 
-Let us now apply MTE with smoothing controlled by parameter *a* as in Equation (1) in [[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf). 
-Prior *P=1/2* for a balanced data. In what follows, we describe how the parameter *a* affects the ordering of categories.
-- *a<1*, {A,B,C}
-- *1<a<4/3*, {B,A,C}
-- *4/3<a<4*, {B,C,A}
-- *4<a*, {C,B,A}
+#### Example 2
 
-One would select the values of the smoothing parameter *a* via hyperparameter optimization (HPO) procedure with cross-validation (CV). 
-Observe the following.
-- Many standard HPO procedures will waste time considering *a* values that do not change the ordering. For instance, for a DT algorithm learning from Table [2](#table2), *a=2* and *a=3* are equivalent.
-- For decision tree learning, some orderings, e.g., inverse, are equivalent since they induce the same sets of possible partitions. 
-I.e., each of orderings {A,B,C} and {C,B,A} induces two possible partitions ({A}, {B,C}) and ({A,B}, {C}). 
-For a DT algorithm learning from Table [2](#table2), *a=0* and *a=5* are equivalent.
-- The number of all possible orders of a nominal feature is higher than the one achievable with smoothing. 
-For instance, there is no *a* value for the above table, that would result in rankings {C,A,B} or {A,C,B}. 
-- With CV, rankings of categories appearing in some folds for some *a* values might be forbidden in others.
+>Table [2](#table2) contains the excerpt from some perfectly balanced (i.e., containing equal number of 0 and 1 in the column 'target') dataset. 
+>Assume that this excerpt contains all examples with category values in {A,B,C}. 
+>The corresponding MTE values are {0,0.2,0.25} that orders these values as {A,B,C}. 
+>Let us now apply MTE with smoothing controlled by parameter *a* as in Equation (1) in [[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf). 
+>Prior *P=1/2* for a balanced data. In what follows, we describe how the parameter *a* affects the ordering of categories.
+>- *a<1*, {A,B,C}
+>- *1<a<4/3*, {B,A,C}
+>- *4/3<a<4*, {B,C,A}
+>- *4<a*, {C,B,A}
+>
+>One would select the values of the smoothing parameter *a* via hyperparameter optimization (HPO) procedure with cross-validation (CV). 
+>Observe the following.
+>- Many standard HPO procedures will waste time considering *a* values that do not change the ordering. For instance, for a DT algorithm learning from Table [2](#table2), *a=2* and *a=3* are equivalent.
+>- For decision tree learning, some orderings, e.g., inverse, are equivalent since they induce the same sets of possible partitions. 
+>I.e., each of orderings {A,B,C} and {C,B,A} induces two possible partitions ({A}, {B,C}) and ({A,B}, {C}). 
+>For a DT algorithm learning from Table [2](#table2), *a=0* and *a=5* are equivalent.
+>- The number of all possible orders of a nominal feature is higher than the one achievable with smoothing. 
+>For instance, there is no *a* value for the above table, that would result in rankings {C,A,B} or {A,C,B}. 
+>- With CV, rankings of categories appearing in some folds for some *a* values might be forbidden in others.
 
 #### Hypothesis 2
-*(A) Perhaps, even more straightforward, faster, and maybe a better way to deal with nominal features of high cardinality is to replace all poorly represented values with a singe 'pseudo-category' before applying MTE.*
-
-*(B) Designing an intelligent procedure for optimization of the smoothing parameter 'a' may save time.*
-
+> (A) Designing an intelligent procedure for optimization of the smoothing parameter 'a' may save time.
+> 
+> (B) Perhaps, even more straightforward, faster, and maybe a better way to deal with nominal features of high cardinality is to replace all poorly represented values with a single `pseudo-category' before applying MTE. See, e.g., [[3]](https://link.springer.com/article/10.1007/s10994-018-5724-2) (Section 4.2)
 
 ### Underfiting? MTE as preprocessing.
 
@@ -127,7 +135,8 @@ That is, one often sticks to *the same* encoding for splitting in each node of a
 Consequently, nominal features with high predictive power in subtrees may not be recognized as such. 
 In other words, MTE as a preprocessing step may result in a loss of important information about *feature interaction*. Note that some implementations of ML algorithms have native support for categorical features &mdash; [python example](https://scikit-learn.org/stable/modules/ensemble.html#categorical-support-gbdt), [R example](https://www.gormanalysis.com/blog/decision-trees-in-r-using-rpart/).
 
-#### <a name="table3"></a> Example 3
+<div align="center">
+<a name="table3"></a> 
 
 | cat1  | cat2 | target   | 
 |:-:|:-:|:-:|
@@ -139,16 +148,19 @@ In other words, MTE as a preprocessing step may result in a loss of important in
 | B  |D| 1  |
 
 Table 3: Exemplary dataset 3.
+</div>
 
-Consider data from Table [3](#table3) that illustrates a particular case of the phenomenon just described when encoding reduces the feature cardinality.
-- If one applies MTE recursively (node-wise) as in conventional decision tree, they will learn the structure p(1|AC) = 1, p(1|AD) = 0, p(1|BC) = 0, p(1|BD) = 1 
-- If one uses MTE as a pre-processing step, both values C and D of cat2 are replaced with 0.5, and cat2 is not used for tree construction. The resulting tree is then p(1|A) = 2/3, p(1|B) =1/3 
+#### Example 3
+
+>Consider data from Table [3](#table3) that illustrates a particular case of the phenomenon just described when encoding reduces the feature cardinality.
+>- If one applies MTE recursively (node-wise) as in conventional decision tree, they will learn the structure p(1|AC) = 1, p(1|AD) = 0, p(1|BC) = 0, p(1|BD) = 1 
+>- If one uses MTE as a pre-processing step, both values C and D of cat2 are replaced with 0.5, and cat2 is not used for tree construction. The resulting tree is then p(1|A) = 2/3, p(1|B) =1/3 
 
 Feature cardinality reduction is not an indicator of underfitting or, in general, any problem with the encoding. To see this, observe that MTE applied to the data from Table [1](#table1) reduces cardinality and leads to overfitting. 
 
 
 #### Hypothesis 3
-*Perhaps, the success of CatBoost can be partially explained by the fact that it does not use encoding as a preprocessing step but does it recursively (see section `Feature combinations' in [[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf)) in a way a conventional decision tree learning algorithm suggests.*
+> Perhaps, the success of CatBoost can be partially explained by the fact that it does not use encoding as a preprocessing step but does it recursively (see section `Feature combinations' in [[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf)) in a way a conventional decision tree learning algorithm suggests.
 
 ### R examples
 
