@@ -27,7 +27,7 @@ Order is not defined for nominal features. In this case, one tries all possible 
 
 As we have explained, MTE does not change the decision tree that would have been obtained with considering all possible partitions of nominal features. If overfitting exists, MTE applied to nominal features is not its reason. Rather, the reason is in nominal features themselves. In particular, for a feature with *q* distinct values the search space consists of *q-1* partitions if it can be ordered and of *2<sup>q-1</sup>-1* when it is nominal. Richer search spaces result in higher [VC-dimension](https://hastie.su.domains/Papers/ESLII.pdf) (Section 7.9) and require larger samples to prevent overfiting. 
 
-To get a grip on the problem, imagine one treats a numeric variable measured with high precision as nominal. In this case, encountering repeated values is unlikely to improbable. With MTE such a variable will stronly correlate with target regardless whether there is any dependence between them --- overfiting is obvious. 
+To get a grip on the problem, imagine one treats a numeric variable measured with high precision as nominal. In this case, encountering repeated values is unlikely to improbable. With MTE such a variable will stronly correlate with target regardless whether there is any dependence between them &mdash; overfiting is obvious. 
 Similarly, MTE itself is a casuse of overfiting problem only when one uses it for spliting not nominal features that can be ordered withoit MTE, i.e., categorical ordinal, numeric, or [discretized](https://towardsdatascience.com/feature-engineering-deep-dive-into-encoding-and-binning-techniques-5618d55a6b38) [numeric](https://machinelearningmastery.com/discretization-transforms-for-machine-learning/) with a large number of bins.
 
 #### Hypothesis 1
@@ -76,17 +76,19 @@ Consider the above excerpt from some perfectly balanced (i.e., containing equal 
 - *1<a<4/3*, {B,A,C}
 - *4/3<a<4*, {B,C,A}
 - *4<a*, {C,B,A}
-
-
+One would select the values of the smoothing parameter *a* via hyperparameter optimization procedure with cross-validation (CV). Observe the following.
+- many standard HPO procedures will waste time by considering *a* values that do not change the ordering. For a DT algorithm learning from the above table, *a=2* and *a=3* are equivalent.
+- the number of all possible orders of a nominal feature is higher than the one achievable with smoothing. For instance, there is no *a* value for the above table, that would result in rankings {C,A,B} or {A,C,B}. 
+- with CV, rankings of categories appearing in some folds for some *a* values might be forbidden in others.
 
 #### Hypothesis 2
-*Perhaps, even more straightforward, faster, and maybe a better way to deal with nominal features of high cardinality is to replace all poorly represented values with a singe 'pseudo-category' before applying MTE.*
+*(A) Perhaps, even more straightforward, faster, and maybe a better way to deal with nominal features of high cardinality is to replace all poorly represented values with a singe 'pseudo-category' before applying MTE.*
 
-
+*(B) designing an intelligent procedure for optimization of the smoothing parameter may save time*
 
 ### Underfiting? MTE as preprocessing.
 
-Can MTE be a reason of underfiting? Yes! The authors of [this blogpost](https://towardsdatascience.com/benchmarking-categorical-encoders-9c322bd77ee8), [another blogpost](https://medium.com/@darnelbolaos/target-encoding-function-with-r-8a037b219fb7), and of this [NeurIPS paper](http://learningsys.org/nips17/assets/papers/paper_11.pdf) argue that one often uses MTE as a *preprocessing* step, whereas building a decision tree is a *recursive* process, as we described. That is, one often sticks to *the same* encoding for splitting in each node of a tree instead of computing it only based on a subset of training data reaching that node. As a consecuence, nominal features that have high predictive power in subtrees may not be recognized as such. In another words, MTE as a preprocessing step may result in a loss of important information about *feature interaction*. Note, that some implementations of ML algorithms have native support for categorical features --- [python example](https://scikit-learn.org/stable/modules/ensemble.html#categorical-support-gbdt), [R example](https://www.gormanalysis.com/blog/decision-trees-in-r-using-rpart/).
+Can MTE be a reason of underfiting? Yes! The authors of [this blogpost](https://towardsdatascience.com/benchmarking-categorical-encoders-9c322bd77ee8), [another blogpost](https://medium.com/@darnelbolaos/target-encoding-function-with-r-8a037b219fb7), and of this [NeurIPS paper](http://learningsys.org/nips17/assets/papers/paper_11.pdf) argue that one often uses MTE as a *preprocessing* step, whereas building a decision tree is a *recursive* process, as we described. That is, one often sticks to *the same* encoding for splitting in each node of a tree instead of computing it only based on a subset of training data reaching that node. As a consecuence, nominal features that have high predictive power in subtrees may not be recognized as such. In another words, MTE as a preprocessing step may result in a loss of important information about *feature interaction*. Note, that some implementations of ML algorithms have native support for categorical features &mdash; [python example](https://scikit-learn.org/stable/modules/ensemble.html#categorical-support-gbdt), [R example](https://www.gormanalysis.com/blog/decision-trees-in-r-using-rpart/).
 
 #### Example 3
 
@@ -115,6 +117,6 @@ We warn from using feature cardinality reduction as indicator of underfitting or
 
 ### Conclusion
 
-Combination of hypotheses 1--3, if not yet tried out, might result in a state-of-the-art algorithm for learnig boosted trees.
+Combination of hypotheses 0&ndash;3, if not yet tried out, might result in a state-of-the-art algorithm for learnig boosted trees.
 
 
