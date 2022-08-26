@@ -25,7 +25,7 @@ To find a split, a decision tree learning algorithm tries different partitioning
 Then, it chooses the split optimizing some heuristic criterion calculated on the target variable's statistics like Gini index or cross-entropy. 
 Only the examples reaching the considered splitting node take part in the statistics calculation, hence the term *recursive*. 
 
-How to define which splits to consider? For all feature types except nominal, the \emph{order} of observed values restricts a variety of possible splits. 
+How to define which splits to consider? For all feature types except nominal, the *order* of observed values restricts a variety of possible splits. 
 In particular, for any not nominal feature *X*, one looks for a split of the form *X<a*, where *a* is some observed value of this feature in the set of examples *reaching the considered node* of a classification tree. 
 
 Order is not defined for nominal features. In this case, one tries all possible splits of the observed feature values into two non-empty sets. 
@@ -38,6 +38,9 @@ In this case, MTE is a trick to speed up the decision tree learning algorithm th
 > Maybe considering richer topologies like the [Chrisman's](https://en.wikipedia.org/wiki/Level_of_measurement#Debate_on_Stevens's_typology) one may improve tree-based models. 
 > For instance, 'cyclic' features like 'month' may deserve special consideration.
 
+### Feature Equality
+
+Before describing overfitting and underfitting problems with bdecision trees,  let us discuss whether a learning algorithm treats numeric and categorical features equally.
 
 ### Overfitting? Nominal features.
 
