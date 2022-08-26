@@ -38,9 +38,45 @@ In this case, MTE is a trick to speed up the decision tree learning algorithm th
 > Maybe considering richer topologies like the [Chrisman's](https://en.wikipedia.org/wiki/Level_of_measurement#Debate_on_Stevens's_typology) one may improve tree-based models. 
 > For instance, 'cyclic' features like 'month' may deserve special consideration.
 
-### Feature Equality
+### Feature 'Equality'
 
-Before describing overfitting and underfitting problems with bdecision trees,  let us discuss whether a learning algorithm treats numeric and categorical features equally.
+Before describing overfitting and underfitting problems with bdecision trees, let us demonstrate how a learning algorithm treats numeric, ordinal, and nominal features differently and what effect does it have on the result. 
+Observe that for each split, a decision tree learning algorithm selects the feature with the highest 'score' (Gini index or cross-entropy). 
+This score reflects the feature's ability to separate examples with different values of target with a *single* split. 
+
+<div align="center">
+<a name="table0"></a> 
+
+| num  | ord | nom | target  |
+|:-:|:-:|:-:|:-:|
+| 1  | low | A | 1 |
+| 2  | low | A | 1 |
+| 3  | low | A | 1 |
+| 4  | medium | B | 1 |
+| 5  | medium | B | 0 |
+| 6  | medium | B | 0 |
+| 7  | medium | B | 1 |
+| 8  | high | C | 1 |
+| 9  | high | C | 1 |
+| 10  | high | C | 1 |
+
+Table 0: Exemplary dataset 0
+</div>
+
+#### Example 0
+>Table [0](#table0) presents a dataset containing numeric, ordinal, and nominal features. 
+>Ordinal and nominal features have the same cardinality and perfectly mathc each other
+>However, according to their scores, *nom>num>ord*. 
+>That is the learning algorithm chooses the feature 'nom' for the first split. 
+>If we limit the size of decision tree to a single split (a decision stump), this feature indeed leads to the best model.
+>However, with the tree depth of two, on thrain data,
+>- The accuracy of the tree obtained exclusively with nominal feature is 0.8
+>- The accuracy of the tree obtained exclusively with ordinal feature is 0.8
+>- The accuracy of the tree obtained with all features is 0.9
+>- The accuracy of the tree obtained exclusively with numeric feature is 1
+>- The accuracy of the tree obtained  with numeric and ordinal feature is 1
+>I.e., nominal feature hinders learning the best (on train data) tree of depth 2.
+
 
 ### Overfitting? Nominal features.
 
@@ -119,11 +155,8 @@ Table 2: Exemplary dataset 2. The excerpt containing all examples with values of
 >One would select the values of the smoothing parameter *a* via hyperparameter optimization (HPO) procedure with cross-validation (CV). 
 >Observe the following.
 >- Many standard HPO procedures will waste time considering *a* values that do not change the ordering. For instance, for a DT algorithm learning from Table [2](#table2), *a=2* and *a=3* are equivalent.
->- For decision tree learning, some orderings, e.g., inverse, are equivalent since they induce the same sets of possible partitions. 
->I.e., each of orderings {A,B,C} and {C,B,A} induces two possible partitions ({A}, {B,C}) and ({A,B}, {C}). 
->For a DT algorithm learning from Table [2](#table2), *a=0* and *a=5* are equivalent.
->- The number of all possible orders of a nominal feature is higher than the one achievable with smoothing. 
->For instance, there is no *a* value for the above table, that would result in rankings {C,A,B} or {A,C,B}. 
+>- For decision tree learning, some orderings, e.g., inverse, are equivalent since they induce the same sets of possible partitions. I.e., each of orderings {A,B,C} and {C,B,A} induces two possible partitions ({A}, {B,C}) and ({A,B}, {C}). For a DT algorithm learning from Table [2](#table2), *a=0* and *a=5* are equivalent.
+>- The number of all possible orders of a nominal feature is higher than the one achievable with smoothing. For instance, there is no *a* value for the above table, that would result in rankings {C,A,B} or {A,C,B}. 
 >- With CV, rankings of categories appearing in some folds for some *a* values might be forbidden in others.
 
 #### Hypothesis 2
