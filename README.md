@@ -155,21 +155,21 @@ Table 2: Exemplary dataset 2. The excerpt containing all examples with values of
 >One would select the values of the smoothing parameter *a* via hyperparameter optimization (HPO) procedure with cross-validation (CV). 
 >Observe the following.
 >- Many standard HPO procedures will waste time considering *a* values that do not change the ordering. For instance, for a DT algorithm learning from Table [2](#table2), *a=2* and *a=3* are equivalent.
->- For decision tree learning, some orderings, e.g., inverse, are equivalent since they induce the same sets of possible partitions. I.e., each of orderings {A,B,C} and {C,B,A} induces two possible partitions ({A}, {B,C}) and ({A,B}, {C}). For a DT algorithm learning from Table [2](#table2), *a=0* and *a=5* are equivalent.
->- The number of all possible orders of a nominal feature is higher than the one achievable with smoothing. For instance, there is no *a* value for the above table, that would result in rankings {C,A,B} or {A,C,B}. 
->- With CV, rankings of categories appearing in some folds for some *a* values might be forbidden in others.
+>- As we have described, for a feature with cardinality *q* the number of possible partitions is *2<sup>q-1</sup>-1*. The number of possible orderings of its values is *q!*, i.e., higher. This means, some orderings, e.g., inverse, are equivalent since they induce the same sets of possible partitions. E.g., each of orderings {A,B,C} and {C,B,A} induces two possible partitions ({A}, {B,C}) and ({A,B}, {C}). For a DT algorithm learning from Table [2](#table2), *a=0* and *a=5* are equivalent.
+>- Some orderings are not achievable with smoothing. For instance, there is no *a* value for the above table, that would result in orderings {C,A,B} or {A,C,B}. 
+>- With CV, orderings of categories appearing in some folds for some *a* values might not be achievable in others.
 
 #### Hypothesis 2
-> (A) Designing an intelligent procedure for optimization of the smoothing parameter 'a' may save time.
+> (A) Designing an intelligent procedure for optimization of the smoothing parameter *a* may save time.
 > 
-> (B) Perhaps, even more straightforward, faster, and maybe a better way to deal with nominal features of high cardinality is to replace all poorly represented values with a single `pseudo-category' before applying MTE. See, e.g., [[3]](https://link.springer.com/article/10.1007/s10994-018-5724-2) (Section 4.2)
+> (B) Perhaps, even more straightforward, faster, and maybe a better way to deal with nominal features of high cardinality is to replace all poorly represented values with a single `pseudo-category' before applying MTE. See, e.g., [[3]](https://link.springer.com/article/10.1007/s10994-018-5724-2) (Section 4.2) or [this blogpost](https://towardsdatascience.com/dealing-with-features-that-have-high-cardinality-1c9212d7ff1b).
 
 ### Underfiting? MTE as preprocessing.
 
 Can MTE be a reason for underfitting? Yes! The authors of [this blogpost](https://towardsdatascience.com/benchmarking-categorical-encoders-9c322bd77ee8), [another blogpost](https://medium.com/@darnelbolaos/target-encoding-function-with-r-8a037b219fb7), and of [[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf) report that one often uses MTE as a *preprocessing* step, whereas building a decision tree is a *recursive* process, as we described. 
-That is, one often sticks to *the same* encoding for splitting in each node of a tree instead of computing it based on a subset of training data reaching that node. 
+That is, one often sticks to *the same* encoding for splitting in each node of a tree instead of computing it based on a subset of training data reaching that node (see also [this blogpost](https://medium.com/data-design/visiting-categorical-features-and-encoding-in-decision-trees-53400fa65931)). 
 Consequently, nominal features with high predictive power in subtrees may not be recognized as such. 
-In other words, MTE as a preprocessing step may result in a loss of important information about *feature interaction*. Note that some implementations of ML algorithms have native support for categorical features &mdash; [python example](https://scikit-learn.org/stable/modules/ensemble.html#categorical-support-gbdt), [R example](https://www.gormanalysis.com/blog/decision-trees-in-r-using-rpart/).
+In other words, MTE as a preprocessing step may result in a loss of important information about *feature interaction*. Note that some implementations of ML algorithms have native support for categorical features &mdash; [python example](https://scikit-learn.org/stable/modules/ensemble.html#categorical-support-gbdt), [R example](https://www.gormanalysis.com/blog/decision-trees-in-r-using-rpart/). 
 
 <div align="center">
 <a name="table3"></a> 
