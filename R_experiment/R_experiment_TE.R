@@ -59,9 +59,10 @@ d_tef <- encode_factor(data.frame(d_te), cols)
 
 
 # TODO: make the plots prettier! (drop split conditions)
-rpart.plot(rpart(target ~ ., d_te), clip.facs = TRUE)   # MTE as preprocessing
-rpart.plot(rpart(target ~ ., d_f))    # recursive MTE
-rpart.plot(rpart(target ~ ., d_tef))  # lossy recursive MTE
+
+dt_te <- rpart(target ~ ., d_te)   # MTE as preprocessing
+dt_f <- rpart(target ~ ., d_f)     # recursive MTE
+dt_tef <- rpart(target ~ ., d_tef) # lossy recursive MTE
 
 
 

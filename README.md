@@ -9,7 +9,7 @@ Although this argumentation and the provided examples look convincing and in lin
 
 In what follows, we explain our view on this problem.
 
-The recent paper [[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf) states that categorical features `cannot be used in binary decision trees directly' since they 'are not necessarily comparable with each other. 
+The recent paper [[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf) states that categorical features 'cannot be used in binary decision trees directly' since they 'are not necessarily comparable with each other. 
 This statement calls for specifying the term 'comparable'.
 For instance, [one can distinguish](https://en.wikipedia.org/wiki/Level_of_measurement) different levels of measurement concerning operations possible on respective data. 
 Note that [ordinal variables](https://en.wikipedia.org/wiki/Ordinal_data), while being attributed to categorical data, do allow to say whether a given value is less than or greater than another. 
@@ -162,7 +162,7 @@ Table 2: Exemplary dataset 2. The excerpt containing all examples with values of
 #### Hypothesis 2
 > (A) Designing an intelligent procedure for optimization of the smoothing parameter *a* may save time.
 > 
-> (B) Perhaps, even more straightforward, faster, and maybe a better way to deal with nominal features of high cardinality is to replace all poorly represented values with a single `pseudo-category' before applying MTE. See, e.g., [[3]](https://link.springer.com/article/10.1007/s10994-018-5724-2) (Section 4.2) or [this blogpost](https://towardsdatascience.com/dealing-with-features-that-have-high-cardinality-1c9212d7ff1b).
+> (B) Perhaps, even more straightforward, faster, and maybe a better way to deal with nominal features of high cardinality is to replace all poorly represented values with a single 'pseudo-category' before applying MTE. See, e.g., [[3]](https://link.springer.com/article/10.1007/s10994-018-5724-2) (Section 4.2) or [this blogpost](https://towardsdatascience.com/dealing-with-features-that-have-high-cardinality-1c9212d7ff1b).
 
 ### Underfiting? MTE as preprocessing.
 
@@ -196,10 +196,11 @@ Feature cardinality reduction is not an indicator of underfitting or, in general
 
 
 #### Hypothesis 3
-> Perhaps, the success of CatBoost can be partially explained by the fact that it does not use encoding as a preprocessing step but does it recursively (see section `Feature combinations' in [[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf)) in a way a conventional decision tree learning algorithm suggests.
+> Perhaps, the success of CatBoost can be partially explained by the fact that it does not use encoding as a preprocessing step but does it recursively (see section 'Feature combinations' in [[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf)) in a way a conventional decision tree learning algorithm suggests.
 
 ### R examples
 
+![DT obtained with MTE as preprocessing](/R_experiment/dt_te.jpg)
 
 
 ### Conclusion
