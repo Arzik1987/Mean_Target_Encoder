@@ -57,12 +57,30 @@ d_f <- encode_factor(data.frame(d), cols)
 # converting to 'factor' type via MTE (lossy)
 d_tef <- encode_factor(data.frame(d_te), cols)
 
-
-# TODO: make the plots prettier! (drop split conditions)
-
+# train models
 dt_te <- rpart(target ~ ., d_te)   # MTE as preprocessing
 dt_f <- rpart(target ~ ., d_f)     # recursive MTE
 dt_tef <- rpart(target ~ ., d_tef) # lossy recursive MTE
 
+# plot models
+jpeg(height = 350, width = 350, "dt_te.jpg")
+plot(dt_te)
+dev.off()
 
+jpeg(height = 350, width = 350, "dt_f.jpg")
+plot(dt_f)
+dev.off()
+
+jpeg(height = 350, width = 350, "dt_tef.jpg")
+plot(dt_tef)
+dev.off()
+
+# TODO: make the plots prettier! (drop split conditions)
+# rpart.plot(dt_te)
+# rpart.plot(dt_f)
+# rpart.plot(dt_tef)
+# 
+# print(dt_te)
+# print(dt_f)
+# print(dt_tef)
 

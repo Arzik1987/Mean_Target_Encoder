@@ -200,8 +200,13 @@ Feature cardinality reduction is not an indicator of underfitting or, in general
 
 ### R examples
 
-![DT obtained with MTE as preprocessing](/R_experiment/dt_te.jpg)
+<div align="center">
 
+![DT obtained with MTE as preprocessing](/R_experiment/dt_te_edited.jpg)
+![DT obtained with MTE recursive](/R_experiment/dt_f_edited.jpg)
+![DT obtained with MTE as preprocessing ADN recursive](/R_experiment/dt_tef_edited.jpg)
+
+</div>
 
 ### Conclusion
 
