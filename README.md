@@ -36,7 +36,7 @@ In this case, MTE is a trick to speed up the decision tree learning algorithm th
 #### Hypothsis 0
 
 > Maybe considering richer topologies like the [Chrisman's](https://en.wikipedia.org/wiki/Level_of_measurement#Debate_on_Stevens's_typology) one may improve tree-based models. 
-> For instance, 'cyclic' features like 'month' may deserve special consideration.
+> For instance, 'cyclic' features like 'month' may deserve [special consideration](https://ianlondon.github.io/blog/encoding-cyclical-features-24hour-time/).
 
 ### Feature 'Equality'
 
