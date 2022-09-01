@@ -10,7 +10,7 @@ Among them, **M**ean **T**arget **E**ncoding (MTE) attained much attention in co
 
 ### MTE
 As the name suggests, the MTE encoder replaces each categorical value with the average target value among all examples belonging to this category.
-[Both](https://towardsdatascience.com/benchmarking-categorical-encoders-9c322bd77ee8) or [blogposts](https://medium.com/@darnelbolaos/target-encoding-function-with-r-8a037b219fb7) and [[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf) argue that MTE in its pure form causes overfitting. 
+[Both](https://towardsdatascience.com/benchmarking-categorical-encoders-9c322bd77ee8) [blogposts](https://medium.com/@darnelbolaos/target-encoding-function-with-r-8a037b219fb7) and [[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf) argue that MTE in its pure form causes overfitting. 
 They explain this via 'leakage' of the information about the target variable during the encoding and propose various solutions to alleviate this effect. 
 Although this argumentation and the provided examples look convincing and is in line with intuition, the following questions remain:
 
