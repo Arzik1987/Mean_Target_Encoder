@@ -82,7 +82,7 @@ Table 0: Exemplary dataset 0
 
 As we have explained, MTE does not change the decision tree that would have been obtained by considering all possible partitions of nominal features. 
 If overfitting exists, MTE applied to nominal features is not its reason. Rather, the reason is in nominal features themselves. 
-In particular, for a feature with *q* distinct values, the search space consists of *q-1* partitions if it can be ordered and *2<sup>q-1</sup>-1* when it is nominal. 
+In particular, for a feature with *q* distinct values, the search space consists of *q&minus;1* partitions if it can be ordered and *2<sup>q&minus;1</sup>&minus;1* when it is nominal. 
 Richer search spaces result in higher VC-dimension [[2]](https://hastie.su.domains/Papers/ESLII.pdf) (Section~7.9) and require larger samples to prevent overfitting.
 
 To get a grip on the problem, imagine one treats a numeric variable measured with high precision as nominal. In this case, encountering repeated values is unlikely. 
@@ -155,7 +155,7 @@ Table 2: Exemplary dataset 2. The excerpt containing all examples with values of
 >One would select the values of the smoothing parameter *a* via hyperparameter optimization (HPO) procedure with cross-validation (CV). 
 >Observe the following.
 >- Many standard HPO procedures will waste time considering *a* values that do not change the ordering. For instance, for a DT algorithm learning from Table [2](#table2), *a=2* and *a=3* are equivalent.
->- As we have described, for a feature with cardinality *q* the number of possible partitions is *2<sup>q-1</sup>-1*. The number of possible orderings of its values is *q!*, i.e., higher. This means, some orderings, e.g., inverse, are equivalent since they induce the same sets of possible partitions. E.g., each of orderings {A,B,C} and {C,B,A} induces two possible partitions ({A}, {B,C}) and ({A,B}, {C}). For a DT algorithm learning from Table [2](#table2), *a=0* and *a=5* are equivalent.
+>- As we have described, for a feature with cardinality *q* the number of possible partitions is *2<sup>q&minus;1</sup>&minus;1*. The number of possible orderings of its values is *q!*, i.e., higher. This means, some orderings, e.g., inverse, are equivalent since they induce the same sets of possible partitions. E.g., each of orderings {A,B,C} and {C,B,A} induces two possible partitions ({A}, {B,C}) and ({A,B}, {C}). For a DT algorithm learning from Table [2](#table2), *a=0* and *a=5* are equivalent.
 >- Some orderings are not achievable with smoothing. For instance, there is no *a* value for the above table, that would result in orderings {C,A,B} or {A,C,B}. 
 >- With CV, orderings of categories appearing in some folds for some *a* values might not be achievable in others.
 
