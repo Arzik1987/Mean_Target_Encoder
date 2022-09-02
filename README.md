@@ -153,7 +153,7 @@ Table 2: Exemplary dataset 2. The excerpt containing all examples with values of
 
 >Table&nbsp;[2](#table2) contains the excerpt from some perfectly balanced (i.e., containing equal number of 0 and 1 in the column 'target') dataset. 
 >Assume that this excerpt contains all examples with category values in {A,B,C}. 
->The corresponding MTE values are {0,0.2,0.25} that orders these values as {A,B,C}. 
+>The corresponding MTE values are {1,0.8,0.75} that orders these values as {A,B,C} (hereafter &mdash; descending). 
 >Let us now apply MTE with smoothing controlled by parameter *a* as in Equation (1) in&nbsp;[[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf). 
 >Prior *P=1/2* for balanced data. In what follows, we describe how the parameter *a* affects the ordering of categories.
 >- *a<1*, {A,B,C}
