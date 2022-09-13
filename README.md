@@ -29,7 +29,7 @@ However, even this information is enough for the classical decision tree learnin
 
 We refer to a clear and concise description of decision trees in&nbsp;[[2]](https://hastie.su.domains/Papers/ESLII.pdf) (Section&nbsp;9.2). 
 For the following, it is important that a conventional binary decision tree does *recursive binary splitting* of the feature space. 
-To find a split, a decision tree learning algorithm tries different partitioning of examples into two groups based on the feature values and considers one feature at-a-time. 
+To find a split, a decision tree learning algorithm tries different partitioning of examples into two groups based on the feature values and considers one feature at a time. 
 Then, it chooses the split optimizing some heuristic criterion calculated on the target variable's statistics like Gini index or cross-entropy. 
 Only the examples reaching the considered splitting node take part in the statistics calculation, hence the term *recursive*. 
 
@@ -37,14 +37,14 @@ How to define which splits to consider? For all feature types that can be ordere
 In particular, for any such feature *X*, one looks for a split of the form *X<a*, where *a* is some observed value of this feature in the set of examples *reaching the considered node* of a classification tree. 
 
 Order is not defined for nominal features. 
-n this case, one tries all possible splits of the observed feature values into two non-empty sets. 
+In this case, one tries all possible splits of the observed feature values into two non-empty sets. 
 The number of possible partitions to consider scales exponentially with the number of distinct feature values, and computations become prohibitive for features of high cardinality. 
 However, it was shown [[2]](https://hastie.su.domains/Papers/ESLII.pdf) (Section&nbsp;9.2.4) that encoding and ordering the values of a nominal feature with MTE does allow to find *the same* optimal split efficiently. 
 In this case, MTE is a trick to speed up the decision tree learning algorithm that *does not affect the result* on its own.
 
 #### Hypothsis 0
 
-> Maybe considering richer topologies like the [Chrisman's](https://en.wikipedia.org/wiki/Level_of_measurement#Debate_on_Stevens's_typology) one may improve tree-based models. 
+> Maybe considering richer typologies like the [Chrisman's](https://en.wikipedia.org/wiki/Level_of_measurement#Debate_on_Stevens's_typology) one may improve tree-based models. 
 > For instance, 'cyclic' features like 'month' may deserve [special consideration](https://ianlondon.github.io/blog/encoding-cyclical-features-24hour-time/).
 
 ### 'Feature Equality'
@@ -120,10 +120,11 @@ Table 1: Exemplary dataset 1
 
 #### Example 1
 
-> Out-of-sample encoding for the dataset from Table&nbsp;[1](#table1) would replace all categories with the prior target value of 0.5 (check if this is default behavior!), making the feature irrelevant for tree construction.
+> Out-of-sample encoding for the dataset from Table&nbsp;[1](#table1) would replace all categories with the prior target value of 0.5 (check if this is default behavior!), making the feature irrelevant for tree construction. 
+> 
 
-Another trick discussed in&nbsp;[[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf) is soothing. Smoothing also changes the correlation between the encoded feature and the target. 
-It does so by reordering encoded values so poorly represented classes become closer to each other when ordered by encoded values. 
+Another trick discussed in&nbsp;[[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf) is smoothing. Smoothing also changes the correlation between the encoded feature and the target. 
+It does so by reordering encoded values so that poorly represented classes become closer to each other when ordered by encoded values. 
 
 <div align="center">
 <a name="table2"></a> 
@@ -155,16 +156,16 @@ Table 2: Exemplary dataset 2. The excerpt containing all examples with values of
 >Assume that this excerpt contains all examples with category values in {A,B,C}. 
 >The corresponding MTE values are {1,0.8,0.75} that orders these values as {A,B,C} (hereafter &mdash; descending). 
 >Let us now apply MTE with smoothing controlled by parameter *a* as in Equation (1) in&nbsp;[[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf). 
->Prior *P=1/2* for balanced data. In what follows, we describe how the parameter *a* affects the ordering of categories.
->- *a<1*, {A,B,C}
->- *1<a<4/3*, {B,A,C}
->- *4/3<a<4*, {B,C,A}
->- *4<a*, {C,B,A}
+>Prior *P=0.5* for balanced data. In what follows, we describe how the smoothing parameter *a* affects the ordering of categories.
+>- *a < 1*        {A,B,C}
+>- *1 < a < 4/3*  {B,A,C}
+>- *4/3 < a < 4*  {B,C,A}
+>- *4 < a*        {C,B,A}
 >
 >One would select the values of the smoothing parameter *a* via hyperparameter optimization (HPO) procedure with cross-validation (CV). 
 >Observe the following.
 >- Many standard HPO procedures will waste time considering *a* values that do not change the ordering. For instance, for a DT algorithm learning from Table&nbsp;[2](#table2), *a=2* and *a=3* are equivalent.
->- As we have described, for a feature with cardinality *q*, the number of possible partitions is *2<sup>q&minus;1</sup>&minus;1*. The number of possible orderings of its values is *q!*, i.e., higher. This means that some orderings, e.g., inverse, are equivalent since they induce the same sets of possible partitions. E.g., each of orderings {A,B,C} and {C,B,A} induces two possible partitions ({A}, {B,C}) and ({A,B}, {C}). For a DT algorithm learning from Table&nbsp;[2](#table2), *a=0* and *a=5* are equivalent. (Well, this is stupid example, because the table is an excerpt. For the complete dataset smoothing can not invert order. TODO: come up with a valid example.)
+>- As we have described, for a feature with cardinality *q*, the number of possible partitions is *2<sup>q&minus;1</sup>&minus;1*. The number of possible orderings of its values is *q!*, i.e., greater. This means that some orderings, e.g., any ordering with its inverse, are equivalent since they induce the same sets of possible partitions. For instance, both {A,B,C} and {C,B,A} induce two possible partitions ({A}, {B,C}) and ({A,B}, {C}). For a DT algorithm learning from Table&nbsp;[2](#table2), *a=0* and *a=5* are equivalent. (Well, this is stupid example, because the table is an excerpt. For the complete dataset smoothing can not invert order. TODO: come up with a valid example.)
 >- Some orderings are not achievable with smoothing. For instance, there is no *a* value for the above table, that would result in orderings {C,A,B} or {A,C,B}. 
 >- With CV, orderings of categories appearing in some folds for some *a* values might not be achievable in others.
 
@@ -173,7 +174,7 @@ Table 2: Exemplary dataset 2. The excerpt containing all examples with values of
 > 
 > (B) Perhaps, even more straightforward, faster, and maybe a better way to deal with nominal features of high cardinality is to replace all poorly represented values with a single 'pseudo-category' before applying MTE. See, e.g., [[3]](https://link.springer.com/article/10.1007/s10994-018-5724-2) (Section&nbsp;4.2) or [this blogpost](https://towardsdatascience.com/dealing-with-features-that-have-high-cardinality-1c9212d7ff1b).
 
-### Underfiting? MTE as preprocessing.
+### Underfitting? MTE as preprocessing.
 
 Can MTE be a reason for underfitting? Yes! The authors of [both](https://towardsdatascience.com/benchmarking-categorical-encoders-9c322bd77ee8) [blogposts](https://medium.com/@darnelbolaos/target-encoding-function-with-r-8a037b219fb7), and of&nbsp;[[1]](http://learningsys.org/nips17/assets/papers/paper_11.pdf) report that one often uses MTE as a *preprocessing* step, whereas building a decision tree is a *recursive* process, as we described. 
 That is, one often sticks to *the same* encoding for splitting in each node of a tree instead of computing it based on a subset of training data reaching that node (see also [this blogpost](https://medium.com/data-design/visiting-categorical-features-and-encoding-in-decision-trees-53400fa65931)). 
