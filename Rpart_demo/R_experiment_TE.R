@@ -1,5 +1,4 @@
 library(rpart)         # for learning DT
-library(rpart.plot)    # for plotting DT
 library(OpenML)
 
 
@@ -25,16 +24,6 @@ encode_te <- function(d, cols){
   d <- d[, colsorig]   # make sure there is no extra columns
   return(d)
 }
-
-#### factor encoding
-
-function(d, cols){
-  for (i in cols){
-    d[, i] <- as.factor(d[, i])
-  }
-  return(d)
-}
-
 
 #### fill NAs
 
@@ -75,12 +64,8 @@ cols <- colnames(d)[grepl('cat', colnames(d), fixed = TRUE)]   # names of catego
 
 d_te <- encode_te(d, cols) # MTE as preprocessing
 dt_te <- rpart(target ~ ., d_te, method = "class")   # MTE as preprocessing
-rpart.plot(dt_te)
 
-d_f <- d
-d_f$target <- as.factor(d_f$target)
-dt_f <- rpart(target ~ ., d_f, method = "class")     # recursive MTE
-rpart.plot(dt_f)
+dt_f <- rpart(target ~ ., d, method = "class")     # recursive MTE
 
 
 # plot models
@@ -92,6 +77,10 @@ jpeg(height = 350, width = 350, "dt_f.jpg")
 plot(dt_f)
 dev.off()
 
+print(dt_te)
+print(dt_f)
+
+
 
 # d_tef <- encode_factor(data.frame(d_te), cols) # converting to 'factor' type via MTE (lossy)
 # dt_tef <- rpart(target ~ ., d_tef, method = "class") # lossy recursive MTE
@@ -101,10 +90,5 @@ dev.off()
 # plot(dt_tef)
 # dev.off()
 
-# # TODO: make the plots prettier! (drop split conditions)
-# 
-# # 
-# # print(dt_te)
-# # print(dt_f)
-# # print(dt_tef)
+# print(dt_tef)
 
