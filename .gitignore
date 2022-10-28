@@ -45,3 +45,4 @@ vignettes/*.pdf
 kick.csv
 .Rhistory
 *.zip
+*.txt

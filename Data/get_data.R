@@ -41,49 +41,59 @@ rename.cols <- function(d, tar, pos){
 
 #### get datasets
 
-get.data <- unction(dname){
-  if(dname == 'kick'){
-    d <- getOMLDataSet(41162)[['data']]
-    tar <- 'IsBadBuy'
-    pos <- '1'
-  } else if(dname == 'upselling'){
-    d <- getOMLDataSet(1114)[['data']]
-    tar <- 'UPSELLING'
-    pos <- '1'
-  } else if(dname == 'internet'){
-    d <- getOMLDataSet(43920)[['data']]
-    tar <- 'who_pays_for_access_work'
-    pos <- '1'
-  } else if(dname == 'churn'){
-    d <- getOMLDataSet(1112)[['data']]
-    tar <- 'CHURN'
-    pos <- '1'
-  } else if(dname == 'appetency'){
-    d <- getOMLDataSet(1111)[['data']]
-    tar <- 'APPETENCY'
-    pos <- '1'
-  } else if(dname == 'epsilon'){
-    d <- getOMLDataSet(42343)[['data']]
-    tar <- 'TARGET_B'
-    pos <- '1'
-  } else if(dname == 'click'){# Original data is too large
-    # Switching to a sample. Using version 10 since it indicates nominal features
-    d <- getOMLDataSet(42733)[['data']]
-    tar <- 'click'
-    pos <- '1'
-  } else if(dname == 'amazon'){
-    d <- getOMLDataSet(43900)[['data']]
-    tar <- 'ACTION'
-    pos <- '1'
-  } else if(dname == 'adult'){
-    d <- getOMLDataSet(1590)[['data']]
-    tar <- 'class'
-    pos <- '>50K'
+get.data <- function(dname){
+  
+  fname <- file.path(dirname(getwd()), 'data', paste0(dname, ".csv"))
+  
+  if(file.exists(fname)){
+    d <- read.csv(fname)
   } else {
-    stop('incorrect dataset name')
+    if(dname == 'kick'){
+      d <- getOMLDataSet(41162)[['data']]
+      tar <- 'IsBadBuy'
+      pos <- '1'
+    } else if(dname == 'upselling'){
+      d <- getOMLDataSet(1114)[['data']]
+      tar <- 'UPSELLING'
+      pos <- '1'
+    } else if(dname == 'internet'){
+      d <- getOMLDataSet(43920)[['data']]
+      tar <- 'who_pays_for_access_work'
+      pos <- '1'
+    } else if(dname == 'churn'){
+      d <- getOMLDataSet(1112)[['data']]
+      tar <- 'CHURN'
+      pos <- '1'
+    } else if(dname == 'appetency'){
+      d <- getOMLDataSet(1111)[['data']]
+      tar <- 'APPETENCY'
+      pos <- '1'
+    } else if(dname == 'epsilon'){
+      d <- getOMLDataSet(42343)[['data']]
+      tar <- 'TARGET_B'
+      pos <- '1'
+    } else if(dname == 'click'){# Original data is too large
+      # Switching to a sample. Using version 10 since it indicates nominal features
+      d <- getOMLDataSet(42733)[['data']]
+      tar <- 'click'
+      pos <- '1'
+    } else if(dname == 'amazon'){
+      d <- getOMLDataSet(43900)[['data']]
+      tar <- 'ACTION'
+      pos <- '1'
+    } else if(dname == 'adult'){
+      d <- getOMLDataSet(1590)[['data']]
+      tar <- 'class'
+      pos <- '>50K'
+    } else {
+      stop('incorrect dataset name')
+    }
+    d <- rename.cols(d, tar, pos)
+    write.csv(d, fname, row.names = FALSE)
   }
-    
-  d <- rename.cols(d, tar, pos)
+  
   d <- fill.na(d)
   d
 }
+
+
