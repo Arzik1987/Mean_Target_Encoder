@@ -42,7 +42,7 @@ vignettes/*.pdf
 *.backup
 
 #### data
-kick.csv
+*.csv
 .Rhistory
 *.zip
 *.txt

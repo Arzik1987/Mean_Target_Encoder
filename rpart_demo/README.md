@@ -5,7 +5,7 @@ Hence, we use this package to demonstrate how using MTE before learning a decisi
 To reproduce our result, you need to install [R](https://www.r-project.org/) and do the following steps.
 
 - Install additional packages `rpart` and `OpenML`.
-- Launch R and execute `experiment_mte.R`.
+- Launch R and execute `rpart_demo.R`.
 
 This sequence of steps outputs tree structures without the names of the features used for each split. 
 The splitting variables are visible from the R console.
