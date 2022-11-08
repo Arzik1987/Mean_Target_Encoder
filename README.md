@@ -213,8 +213,8 @@ Feature cardinality reduction is not an indicator of underfitting or, in general
 <div align="center">
 <a name="figure1"></a> 
 
-![DT obtained with MTE as preprocessing](/rpart_demo/dt_te_edited.jpg)
 ![DT obtained with MTE recursive](/rpart_demo/dt_f_edited.jpg)
+![DT obtained with MTE as preprocessing](/rpart_demo/dt_te_edited.jpg)
 
 Figure 1: Different ways to use MTE with 'rpart' R package.
 
@@ -222,8 +222,8 @@ Figure 1: Different ways to use MTE with 'rpart' R package.
 
 R package 'rpart' provides a decision tree learner and can handle categorical data if one specifies them as a 'factor' data type. 
 So we used this package to demonstrate the effect of different ways to use MTE. Figure [1](#figure1) presents the decision trees [learned](https://github.com/Arzik1987/Mean_Target_Encoder/tree/main/rpart_demo) from kick dataset:
-- In plot (A), MTE is a preprocessing step.
-- Plot (B) is the decision tree learned with 'rpart' when categorical features have a 'factor' data type.
+- Plot (A) is the decision tree learned with 'rpart' when categorical features have a 'factor' data type.
+- In plot (B), MTE is a preprocessing step.
 
 (B) differs from (A) because of the effect we described in Example 3 &mdash; some information about feature interactions is lost when MTE is a *preprocessing* step. 
 
