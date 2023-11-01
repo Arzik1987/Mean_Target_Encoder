@@ -46,3 +46,4 @@ vignettes/*.pdf
 .Rhistory
 *.zip
 *.txt
+encode_combine.py
